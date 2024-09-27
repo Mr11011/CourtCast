@@ -1,20 +1,35 @@
-// cubit/auth_states.dart
 import 'package:firebase_auth/firebase_auth.dart';
 
-abstract class AuthState {}
+abstract class authStates {}
 
-class AuthInitialState extends AuthState {}
+class authStatesLoading extends authStates {}
 
-class AuthLoadingState extends AuthState {}
+class authStatesInit extends authStates {}
 
-class AuthSuccessState extends AuthState {
-  final UserCredential user;
+class authStatesSuccess extends authStates {
+  final User user;
 
-  AuthSuccessState(this.user);
+  authStatesSuccess(this.user);
 }
 
-class AuthErrorState extends AuthState {
+class authStatesError extends authStates {
   final String error;
 
-  AuthErrorState(this.error);
+  authStatesError(this.error);
+}
+
+class signUpStatesLoading extends authStates {}
+
+class signUpStatesInit extends authStates {}
+
+class signUpStatesSuccess extends authStates {
+  final User user;
+
+  signUpStatesSuccess(this.user);
+}
+
+class signUpStatesError extends authStates {
+  final String error;
+
+  signUpStatesError(this.error);
 }

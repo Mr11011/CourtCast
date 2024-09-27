@@ -12,6 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../domain/auth_cubit.dart';
 import '../controller/auth_cubit/cubit/auth_cubit.dart';
+import '../controller/auth_cubit/states/auth_states.dart';
 
 class SignInScreen extends StatefulWidget {
   SignInScreen({super.key});

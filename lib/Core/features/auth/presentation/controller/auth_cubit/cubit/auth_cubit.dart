@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../states/auth_states.dart';
+
 class authCubit extends Cubit<authStates> {
   authCubit() : super(authStatesInit());
 
