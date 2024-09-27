@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "701823672667",
+    "project_id": "courtcast-93e87",
+    "storage_bucket": "courtcast-93e87.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701823672667:android:d898e3778aa47afc04fa7e",
+        "android_client_info": {
+          "package_name": "com.example.courtcast"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiHeDB2Ci4JvVvi9EX4TkwL9HUjWpG0As"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
