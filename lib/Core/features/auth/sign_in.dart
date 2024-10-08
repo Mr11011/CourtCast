@@ -1,19 +1,19 @@
 
-
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:courtcast/Core/features/auth/sign_up.dart';
 import 'package:courtcast/Core/features/auth/textfield.dart';
-import 'package:courtcast/Core/features/fetch_weather_data/presentation/fetch_weather_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../../../main.dart';
+
+import '../fetch_weather_conditions/presentation/screens/weather_screen.dart';
 import 'controller/cubit/auth_cubit.dart';
 import 'controller/states/auth_states.dart';
 
 class SignInScreen extends StatefulWidget {
-  SignInScreen({super.key});
+  const SignInScreen({super.key});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -45,7 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   gravity: ToastGravity.SNACKBAR,
                   backgroundColor: Colors.green);
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => FetchWeatherScreen()),
+                MaterialPageRoute(builder: (context) => WeatherScreen()),
                     (Route<dynamic> route) => false,
               );
             } else if (state is authStatesError) {

@@ -1,13 +1,11 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:courtcast/Core/features/auth/textfield.dart';
-import 'package:courtcast/Core/features/fetch_weather_data/presentation/fetch_weather_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../../../main.dart';
+import '../fetch_weather_conditions/presentation/screens/weather_screen.dart';
 import 'controller/cubit/auth_cubit.dart';
 import 'controller/states/auth_states.dart';
 
@@ -39,7 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   backgroundColor: Colors.green);
 
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => FetchWeatherScreen()),
+                MaterialPageRoute(builder: (context) => const WeatherScreen()),
                     (Route<dynamic> route) => false,
               );
             } else if (state is signUpStatesError) {
@@ -55,15 +53,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Container(
                 width: double.infinity,
                 height: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
+                decoration: const BoxDecoration(
+                  image: const DecorationImage(
                     fit: BoxFit.fill,
                     image: AssetImage("assets/OB.png"),
                   ),
                 ),
               ),
               SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Form(
                   key: formKey,
                   child: Padding(
@@ -79,15 +77,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             width: 200,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
-                              image: DecorationImage(
+                              image: const DecorationImage(
                                 fit: BoxFit.contain,
                                 image: AssetImage("assets/char3.png"),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
-                        Text(
+                        const SizedBox(height: 20),
+                        const Text(
                           "Create Account",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -185,7 +183,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       PasswordController.text.trim());
                                 }
                               },
-                              child: Text(
+                              child: const Text(
                                 "Let's Go",
                                 style: TextStyle(
                                     color: Colors.black,
@@ -194,11 +192,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.amber,
-                                  minimumSize: Size(150, 50)),
+                                  minimumSize: const Size(150, 50)),
                             ),
                           ),
                           fallback: (context) =>
-                              Center(child: CircularProgressIndicator()),
+                              const Center(child: CircularProgressIndicator()),
                           condition: state is! authStatesLoading,
                         ),
                       ],

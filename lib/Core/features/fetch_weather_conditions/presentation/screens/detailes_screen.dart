@@ -1,20 +1,20 @@
-import 'package:courtcast/Core/features/fetch_weather_data/presentation/fetch_weather_cubit.dart';
-import 'package:courtcast/Core/features/fetch_weather_data/presentation/fetch_weather_states.dart';
+import 'package:courtcast/Core/features/fetch_weather_conditions/presentation/controller/fetch_weather_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
+import '../controller/fetch_weather_states.dart';
 
-class DetailsScreen extends StatelessWidget {
-  const DetailsScreen({super.key});
+class WeatherDetailsScreen extends StatelessWidget {
+  const WeatherDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FetchWeatherCubit, FetchWeatherStates>(
+    return BlocBuilder<WeatherCubit, WeatherStates>(
       builder: (context, state) {
-        if (state is FetchWeatherLoadingState) {
+        if (state is WeatherLoadingState) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state is FetchWeatherSuccessState) {
-          final weather = state.fetchWeatherEntity;
+        } else if (state is WeatherSuccessState) {
+          final weather = state.weatherEntity;
           final forecast = weather.forecast.forecastDay;
           final forecastDay = state.forecastDay;
 
@@ -37,62 +37,60 @@ class DetailsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   // Display current weather
-                  Padding(
-                    padding: const EdgeInsets.only(top: 18.0),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 18.0),
                     child: Text(
                       "Tomorrow Weather",
                       style: TextStyle(fontSize: 24, fontFamily: 'karla'),
                     ),
                   ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 100,
-                          width: 120,
-                          child: Image.network(
-                              fit: BoxFit.contain,
-                              "https:${forecastDay[1].day.condition.icon}"),
-                        ),
-                        Column(
-                          children: [
-                            const SizedBox(height: 25),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 100,
+                        width: 120,
+                        child: Image.network(
+                            fit: BoxFit.contain,
+                            "https:${forecastDay[1].day.condition.icon}"),
+                      ),
+                      Column(
+                        children: [
+                          const SizedBox(height: 25),
+                          RichText(
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text:
+                                      '${forecastDay[1].day.maxtemp_c.toInt()}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blueAccent,
+                                      fontSize: 45,
+                                      fontFamily: 'karla'),
+                                ),
+                                TextSpan(
                                     text:
-                                        '${forecastDay[1].day.maxtemp_c.toInt()}',
+                                        ' /${forecastDay[1].day.mintemp_c.toInt()} °C',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.blueAccent,
-                                        fontSize: 45,
-                                        fontFamily: 'karla'),
-                                  ),
-                                  TextSpan(
-                                      text:
-                                          ' /${forecastDay[1].day.mintemp_c.toInt()} °C',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blueAccent,
-                                          fontSize: 28,
-                                          fontFamily: 'karla'))
-                                ],
-                              ),
+                                        fontSize: 28,
+                                        fontFamily: 'karla'))
+                              ],
                             ),
-                            Text(
-                              "${forecastDay[1].day.condition.text.toString()}",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontFamily: 'karla',
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 20),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                          Text(
+                            "${forecastDay[1].day.condition.text.toString()}",
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'karla',
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    ],
                   ),
                   Container(
                     height: 1.65,
@@ -114,16 +112,16 @@ class DetailsScreen extends StatelessWidget {
                                 height: 40,
                                 color: Colors.blueGrey,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
                                   "${forecastDay[1].day.maxwind_kph.toString()} Km/h",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'karla',
                                       fontSize: 14)),
-                              Text("Wind",
+                              const Text("Wind",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'karla',
@@ -136,17 +134,17 @@ class DetailsScreen extends StatelessWidget {
                                 width: 40,
                                 height: 45,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
                                 "${forecastDay[1].day.avghumidity.toString()}%",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'karla',
                                     fontSize: 14),
                               ),
-                              Text("Humidity",
+                              const Text("Humidity",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'karla',
@@ -159,17 +157,17 @@ class DetailsScreen extends StatelessWidget {
                                 width: 50,
                                 height: 40,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
                                 "${forecastDay[1].day.daily_chance_of_rain.toString()}%",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'karla',
                                     fontSize: 15),
                               ),
-                              Text("Chance Of Rain",
+                              const Text("Chance Of Rain",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'karla',
@@ -200,7 +198,6 @@ class DetailsScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: Colors.grey.withOpacity(0.35),
                               borderRadius: BorderRadius.circular(35),
-
                             ),
                             child: Row(
                               children: [
@@ -213,7 +210,7 @@ class DetailsScreen extends StatelessWidget {
                                         Colors.blueGrey.withOpacity(0.22),
                                     child: Text(
                                       "${forecastDay.date.toString()}",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontFamily: 'karla',
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -238,7 +235,7 @@ class DetailsScreen extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     "${forecastDay.day.condition.text}",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontFamily: 'karla',
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
@@ -247,7 +244,7 @@ class DetailsScreen extends StatelessWidget {
                                   ),
                                 ),
 
-                                SizedBox(width: 20),
+                                const SizedBox(width: 20),
                                 // Spacer between icon and sunrise/sunset times
 
                                 // Sunrise and Sunset Info
@@ -262,17 +259,17 @@ class DetailsScreen extends StatelessWidget {
                                           width: 25,
                                           height: 25,
                                         ),
-                                        SizedBox(width: 5),
+                                        const SizedBox(width: 5),
                                         Text(
                                           "${forecastDay.astro.sunrise.toString()}",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontFamily: 'karla',
                                             fontSize: 16.5,
                                           ),
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: 15), // Space between rows
+                                    const SizedBox(height: 15), // Space between rows
                                     Row(
                                       children: [
                                         Image.asset(
@@ -281,10 +278,10 @@ class DetailsScreen extends StatelessWidget {
                                           height: 25,
                                           color: Colors.brown,
                                         ),
-                                        SizedBox(width: 5),
+                                        const SizedBox(width: 5),
                                         Text(
                                           "${forecastDay.astro.sunset.toString()}",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontFamily: 'karla',
                                             fontSize: 16.5,
                                           ),
@@ -299,7 +296,7 @@ class DetailsScreen extends StatelessWidget {
                         );
                       },
                       separatorBuilder: (context, index) {
-                        return SizedBox(
+                        return const SizedBox(
                           height: 10,
                         ); // Example separator
                       },
@@ -309,7 +306,7 @@ class DetailsScreen extends StatelessWidget {
               ),
             ),
           );
-        } else if (state is FetchWeatherFailureState) {
+        } else if (state is WeatherFailureState) {
           return Center(
               child: Text("Error: ${state.error}",
                   style: const TextStyle(color: Colors.red)));
