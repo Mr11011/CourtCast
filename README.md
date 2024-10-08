@@ -2,6 +2,10 @@
 
 **CourtCast** is a Flutter app designed to help tennis players determine the best days to play based on real-time weather conditions. With AI-driven insights, it provides tailored recommendations for each day, ensuring players are informed about optimal playing conditions.
 
+The app is built following Flutter Clean Architecture, ensuring the code is well-organized, scalable, and maintainable. By separating concerns into distinct layers—such as Presentation, Domain, and Data. it improves testability and makes future enhancements easier to implement. This architectural pattern allows for clear separation between the UI and business logic, promoting a robust and flexible development process.
+
+
+
 ### Features 🌟
 - **Real-Time Weather Data**: Displays current and 7-day weather forecasts based on the device’s location. 📱
 - **Smooth UI**: A clean, intuitive interface offering quick access to weather details and tennis playability. 🎾
