@@ -1,5 +1,3 @@
-import 'package:bloc/bloc.dart';
-import 'package:courtcast/Core/features/auth/domain/auth_states.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,7 +55,7 @@ class authCubit extends Cubit<authStates> {
     emit(authStatesLoading());
     try {
       UserCredential userCredential =
-          await _firebaseAuth.signInWithEmailAndPassword(
+      await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );

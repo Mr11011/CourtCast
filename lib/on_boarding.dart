@@ -1,6 +1,7 @@
-import 'package:courtcast/Core/features/auth/presentation/screens/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import 'Core/features/auth/sign_in.dart';
 
 class OnBoarding extends StatefulWidget {
   const OnBoarding({super.key});

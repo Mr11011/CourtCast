@@ -16,17 +16,17 @@ class CustomTextFormField extends StatelessWidget {
 
   const CustomTextFormField(
       {Key? key,
-      this.labelText,
-      this.hintText,
-      this.controller,
-      this.keyboardType = TextInputType.text,
-      this.obscureText = false,
-      this.validator,
-      this.prefixIcon,
-      this.suffixIcon,
-      this.onSuffixIconPressed,
-      this.focusedCustomColor,
-      this.borderColor})
+        this.labelText,
+        this.hintText,
+        this.controller,
+        this.keyboardType = TextInputType.text,
+        this.obscureText = false,
+        this.validator,
+        this.prefixIcon,
+        this.suffixIcon,
+        this.onSuffixIconPressed,
+        this.focusedCustomColor,
+        this.borderColor})
       : super(key: key);
 
   @override
@@ -39,7 +39,7 @@ class CustomTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),borderSide: BorderSide(color: focusedCustomColor?? Colors.black)
+            borderRadius: BorderRadius.circular(20),borderSide: BorderSide(color: focusedCustomColor?? Colors.black)
         ),
         hintText: hintText,
         enabledBorder: OutlineInputBorder(
@@ -48,9 +48,9 @@ class CustomTextFormField extends StatelessWidget {
         prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
         suffixIcon: suffixIcon != null
             ? IconButton(
-                onPressed: onSuffixIconPressed,
-                icon: Icon(suffixIcon),
-              )
+          onPressed: onSuffixIconPressed,
+          icon: Icon(suffixIcon),
+        )
             : null,
       ),
     );

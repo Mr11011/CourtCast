@@ -1,18 +1,16 @@
+
+
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:courtcast/Core/features/auth/domain/auth_states.dart';
-import 'package:courtcast/Core/features/auth/presentation/screens/sign_up.dart';
-import 'package:courtcast/Core/features/auth/presentation/widgets/textfield.dart';
-import 'package:courtcast/main.dart';
-import 'package:courtcast/on_boarding.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:courtcast/Core/features/auth/sign_up.dart';
+import 'package:courtcast/Core/features/auth/textfield.dart';
+import 'package:courtcast/Core/features/fetch_weather_data/presentation/fetch_weather_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../../domain/auth_cubit.dart';
-import '../controller/auth_cubit/cubit/auth_cubit.dart';
-import '../controller/auth_cubit/states/auth_states.dart';
+import '../../../main.dart';
+import 'controller/cubit/auth_cubit.dart';
+import 'controller/states/auth_states.dart';
 
 class SignInScreen extends StatefulWidget {
   SignInScreen({super.key});
@@ -46,8 +44,10 @@ class _SignInScreenState extends State<SignInScreen> {
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.SNACKBAR,
                   backgroundColor: Colors.green);
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => FetchWeatherScreen()),
+                    (Route<dynamic> route) => false,
+              );
             } else if (state is authStatesError) {
               Fluttertoast.showToast(
                   msg: state.error,
@@ -103,7 +103,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         // Email TextField
                         Padding(
                           padding:
-                              const EdgeInsets.only(top: 15.0, bottom: 18.0),
+                          const EdgeInsets.only(top: 15.0, bottom: 18.0),
                           child: CustomTextFormField(
                             focusedCustomColor: Colors.purple,
                             controller: EmailController,
@@ -143,7 +143,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         // Password TextField
                         Padding(
                           padding:
-                              const EdgeInsets.only(top: 18.0, bottom: 18.0),
+                          const EdgeInsets.only(top: 18.0, bottom: 18.0),
                           child: CustomTextFormField(
                             controller: PasswordController,
                             validator: (value) {

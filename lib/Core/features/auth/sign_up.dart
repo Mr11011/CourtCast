@@ -1,16 +1,15 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:courtcast/Core/features/auth/domain/auth_cubit.dart';
-import 'package:courtcast/Core/features/auth/domain/auth_states.dart';
-import 'package:courtcast/Core/features/auth/presentation/screens/sign_in.dart';
-import 'package:courtcast/Core/features/auth/presentation/widgets/textfield.dart';
+import 'package:courtcast/Core/features/auth/textfield.dart';
+import 'package:courtcast/Core/features/fetch_weather_data/presentation/fetch_weather_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../../../../main.dart';
-import '../controller/auth_cubit/cubit/auth_cubit.dart';
-import '../controller/auth_cubit/states/auth_states.dart';
+import '../../../main.dart';
+import 'controller/cubit/auth_cubit.dart';
+import 'controller/states/auth_states.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key});
@@ -40,7 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   backgroundColor: Colors.green);
 
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => HomePage()),
+                MaterialPageRoute(builder: (context) => FetchWeatherScreen()),
                     (Route<dynamic> route) => false,
               );
             } else if (state is signUpStatesError) {
@@ -99,7 +98,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         // Username TextField
                         Padding(
                           padding:
-                              const EdgeInsets.only(bottom: 18.0, top: 35.0),
+                          const EdgeInsets.only(bottom: 18.0, top: 35.0),
                           child: CustomTextFormField(
                             controller: UserNameController,
                             labelText: "Username",
@@ -119,7 +118,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         // Email TextField
                         Padding(
                           padding:
-                              const EdgeInsets.only(bottom: 18.0, top: 18.0),
+                          const EdgeInsets.only(bottom: 18.0, top: 18.0),
                           child: CustomTextFormField(
                             controller: EmailController,
                             labelText: "Email",
@@ -150,7 +149,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         // Password
                         Padding(
                           padding:
-                              const EdgeInsets.only(bottom: 30.0, top: 18.0),
+                          const EdgeInsets.only(bottom: 30.0, top: 18.0),
                           child: CustomTextFormField(
                             controller: PasswordController,
                             labelText: "Password",
