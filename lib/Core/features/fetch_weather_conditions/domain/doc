@@ -1,0 +1,24 @@
+### Domain Layer Documentation
+
+
+###1. Entities
+    Entities represent the core business objects in the domain layer, free from any dependencies on external libraries or frameworks.
+    These are pure Dart objects representing weather data.
+
+   - WeatherEntity: Contains data about the location, current weather, and forecast.
+   - location Entity: Represents the location details (name, region, country).
+   - CurrentWeatherEntity: Contains the current weather conditions such as temperature, humidity, UV index, and wind speed.
+   - ForecastEntity: Represents the weather forecast, containing a list of ForecastDay.
+   - DayEntity: Includes details like maximum and minimum temperatures, chance of rain, wind speed, and humidity.
+   - AstroEntity: Represents astronomical data (sunrise and sunset).
+   -ConditionEntity: Describes the weather condition (text and icon).
+
+### 2. Repository Interface
+   - The WeatherRepo interface defines the contract for the weather repository. It declares a method fetchWeatherInfo,
+     which returns a WeatherEntity wrapped in a Future and uses the Either type from the Dartz library for error handling.
+
+   - fetchWeatherInfo: Takes latitude and longitude as inputs and returns weather data or a Failure.
+
+### 3. Use Case
+    - FetchingWeatherUseCase: This class is responsible for executing the business logic to fetch weather information by calling the repository's fetchWeatherInfo method.
+    - Failure: A simple class to represent failures and errors, containing an error message.

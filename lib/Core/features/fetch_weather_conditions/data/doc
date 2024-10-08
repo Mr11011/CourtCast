@@ -1,0 +1,31 @@
+### Data Layer Documentation
+
+#### 1. Data Source
+The `WeatherDataSource` is responsible for fetching weather data from an external API (Weather API). It provides an abstract class (`WeatherDataSource`)
+with a method to fetch the weather information (`fetchWeatherInfo`), which takes longitude and latitude as inputs.
+
+- WeatherDataSourceImpl: Implements the data source. Uses the `http` client to make a GET request to the Weather API, parsing the response into a `WeatherModel`.
+- Error Handling: It handles various exceptions like `SocketException`, `TimeoutException`, `http.ClientException`,
+ and other unknown errors by throwing a `NetworkException`.
+
+
+#### 2. Model
+The `WeatherModel` and its nested models represent the structure of the weather data retrieved from the API.
+ Each model has methods to convert from and to JSON, and methods to convert the model to its respective entity.
+
+- WeatherModel: Contains data about the current weather, forecast, and location.
+- Location: Represents the location details (name, region, and country).
+- CurrentWeatherModel: Contains current weather conditions like temperature, humidity, UV index, and wind speed.
+- ForecastWeatherModel: Represents the weather forecast, containing a list of forecast days.
+- ForecastDayModeL: Represents weather details for a specific day.
+- DayModel: Contains temperature, chance of rain, wind speed, and humidity for a specific day.
+- AstroModel: Represents sunrise and sunset times.
+- ConditionModel: Contains the weather condition text and icon.
+
+Each model has a `toEntity()` method, which converts it to its corresponding domain layer entity.
+
+#### 3. Repository Implementation
+The `WeatherRepoImpl` class implements the domain layer's `WeatherRepo` interface.
+It uses the `WeatherDataSource` to fetch the weather data and convert it to an entity.
+
+- Error Handling: If a `NetworkException` is thrown, the repository returns a `Failure` object containing the error message.

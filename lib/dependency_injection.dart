@@ -17,13 +17,13 @@ void setupDependencies() {
       () => WeatherDataSourceImpl(client: getIt<http.Client>()));
 
   // 3. Register WeatherRepoImpl, providing the data source
-  getIt.registerLazySingleton<WeatherRepo>(() =>
-      WeatherRepoImpl(weatherDataSource: getIt<WeatherDataSource>()));
+  getIt.registerLazySingleton<WeatherRepo>(
+      () => WeatherRepoImpl(weatherDataSource: getIt<WeatherDataSource>()));
 
   // 4. Register FetchingWeatherUseCase, providing the repo
   getIt.registerLazySingleton<FetchingWeatherUseCase>(
       () => FetchingWeatherUseCase(getIt<WeatherRepo>()));
 
-  getIt.registerFactory<WeatherCubit>(() => WeatherCubit(
-      fetchingWeatherUseCase: getIt<FetchingWeatherUseCase>()));
+  getIt.registerFactory<WeatherCubit>(() =>
+      WeatherCubit(fetchingWeatherUseCase: getIt<FetchingWeatherUseCase>()));
 }

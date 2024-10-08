@@ -1,0 +1,27 @@
+### Presentation Layer Documentation
+
+     ### 1. Weather Cubit
+        - The WeatherCubit is responsible for managing the state of the weather data within the app, using the Cubit class from the flutter_bloc package.
+         interacting with the domain layer and manages UI states accordingly.
+
+        - fetchWeatherInfo: A method that fetches weather information by calling the FetchingWeatherUseCase.
+        It emits various states based on the result of the operation (loading, success, or failure).
+
+    ### 2. Weather States
+        - Weather states are used to manage the different outcomes of fetching weather data.
+
+           - WeatherInitState: The state before any action is taken.
+           - WeatherLoadingState: The state while the app is fetching weather data.
+           - WeatherSuccessState: The state when weather data is successfully retrieved. It holds the WeatherEntity and a list of ForecastDay for displaying current and forecast weather.
+           - WeatherFailureState: The state when an error occurs during the data fetching process. It contains the error message.
+
+
+    ###  3. Weather Screen
+        - The main screen is responsible for displaying the current weather and location by obtaining the latitude and longitude of the device.
+          It interacts with the WeatherCubit to fetch and display the data,
+          showing a loading state, the current weather, or an error based on the state emitted by the cubit.
+
+    ###4. Details Screen
+        - The details screen shows the weather forecast for the next 7 days,
+         utilizing the forecastDay data available in the WeatherSuccessState.
+         It displays each day's weather conditions, including temperature, chance of rain, and other details.`

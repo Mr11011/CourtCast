@@ -1,9 +1,8 @@
-import 'package:courtcast/Core/features/fetch_weather_conditions/data/data_source/weather_data_source.dart';
-import 'package:courtcast/Core/features/fetch_weather_conditions/data/data_source/weather_data_source.dart';
 import 'package:courtcast/Core/features/fetch_weather_conditions/domain/repo/weather_repo.dart';
 import 'package:dartz/dartz.dart';
 import '../../domain/use_case/failure_usecase.dart';
 import '../../domain/entities/weather_data_entity.dart';
+import '../data_source/weather_data_source.dart';
 
 class WeatherRepoImpl implements WeatherRepo {
   final WeatherDataSource weatherDataSource;

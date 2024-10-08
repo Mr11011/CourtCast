@@ -1,3 +1,4 @@
+import 'package:courtcast/Core/features/fetch_weather_conditions/domain/entities/forecast_entity.dart';
 import 'package:courtcast/Core/features/fetch_weather_conditions/domain/entities/weather_data_entity.dart';
 import 'package:courtcast/Core/features/fetch_weather_conditions/presentation/screens/detailes_screen.dart';
 import 'package:courtcast/Core/features/fetch_weather_conditions/presentation/controller/fetch_weather_cubit.dart';
