@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Core/features/auth/blocObserver.dart';
-import 'Core/features/auth/controller/cubit/auth_cubit.dart';
-import 'Core/features/fetch_weather_conditions/presentation/controller/fetch_weather_cubit.dart';
-import 'Core/features/fetch_weather_conditions/presentation/screens/weather_screen.dart';
-import 'dependency_injection.dart';
+import 'features/auth/blocObserver.dart';
+import 'features/auth/controller/cubit/auth_cubit.dart';
+import 'features/fetch_weather_conditions/presentation/controller/fetch_weather_cubit.dart';
+import 'Core/dependency_injection.dart';
+import 'features/fetch_weather_conditions/presentation/screens/weather_screen.dart';
 import 'firebase_options.dart';
 import 'on_boarding.dart';
 
