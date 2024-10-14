@@ -29,7 +29,6 @@ The app is built following Flutter Clean Architecture, ensuring the code is well
    ```bash
    git clone https://github.com/Mr11011/CourtCast.git
 
-# Video Link:
-https://drive.google.com/file/d/1lu_p_fGz7UFixTzJKuh6Yd6QtMRccXmb/view?usp=drive_link
+
    
   
