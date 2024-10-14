@@ -28,7 +28,4 @@ The app is built following Flutter Clean Architecture, ensuring the code is well
    Use the following command to clone the project to your local machine:
    ```bash
    git clone https://github.com/Mr11011/CourtCast.git
-
-
-   
   
