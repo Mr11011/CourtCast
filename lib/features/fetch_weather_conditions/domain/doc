@@ -12,6 +12,7 @@
    - DayEntity: Includes details like maximum and minimum temperatures, chance of rain, wind speed, and humidity.
    - AstroEntity: Represents astronomical data (sunrise and sunset).
    -ConditionEntity: Describes the weather condition (text and icon).
+   -AI Entity: This is responsible to take the entity from the weather entity or others and make some conditions for the AI prediction.
 
 ### 2. Repository Interface
    - The WeatherRepo interface defines the contract for the weather repository. It declares a method fetchWeatherInfo,

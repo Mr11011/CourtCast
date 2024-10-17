@@ -1,3 +1,5 @@
+import 'package:courtcast/features/fetch_weather_conditions/data/data_source/ai_model_data_source.dart';
+import 'package:courtcast/features/fetch_weather_conditions/domain/entities/ai_entity.dart';
 import 'package:courtcast/features/fetch_weather_conditions/domain/entities/forecast_entity.dart';
 import 'package:courtcast/features/fetch_weather_conditions/domain/entities/weather_data_entity.dart';
 import 'package:courtcast/features/fetch_weather_conditions/presentation/screens/detailes_screen.dart';
@@ -8,6 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../data/data_source/history_data.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -75,74 +79,221 @@ class _WeatherScreenState extends State<WeatherScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return SafeArea(
-      child: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                HexColor("#1434A4").withOpacity(0.5),
-                HexColor("#1434A4").withOpacity(0.2),
-                Colors.white.withOpacity(0.4),
-                Colors.cyanAccent,
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          child: BlocConsumer<WeatherCubit, WeatherStates>(
-            listener: (context, state) {
-              if (state is WeatherSuccessState) {
-                Fluttertoast.showToast(msg: "Successfully loaded");
-              } else if (state is WeatherFailureState) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error: ${state.error.toString()}')),
-                );
-              }
-            },
-            builder: (context, state) {
-              if (state is WeatherLoadingState) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is WeatherSuccessState) {
-                final weather = state.weatherEntity;
-                final forecast = weather.forecast.forecastDay;
-
-                return Padding(
-                  padding: EdgeInsets.all(screenHeight * 0.01),
-                  child: Stack(
-                    alignment: Alignment.topCenter,
-                    children: [
-                      _buildLocationRow(weather, screenWidth),
-                      _buildWeatherDetails(weather, screenWidth, screenHeight),
-                      _buildMoreDetailsButton(context, screenWidth),
-                      _buildForecastList(forecast, screenWidth),
-                    ],
-                  ),
-                );
-              } else if (state is WeatherFailureState) {
-                return _buildErrorMessage(state.error.toString(), screenWidth);
-              } else {
-                return const Center(
-                  child: Text(
-                    "Loading ...",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'karla',
-                    ),
-                  ),
-                );
-              }
-            },
+        child: Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              HexColor("#1434A4").withOpacity(0.5),
+              HexColor("#1434A4").withOpacity(0.2),
+              Colors.white.withOpacity(0.4),
+              Colors.cyanAccent,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
-      ),
-    );
-  }
+        child: BlocConsumer<WeatherCubit, WeatherStates>(
+          listener: (context, state) {
+            if (state is WeatherSuccessState) {
+              Fluttertoast.showToast(msg: "Successfully loaded");
+            } else if (state is WeatherFailureState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error: ${state.error.toString()}')),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is WeatherLoadingState) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is WeatherSuccessState) {
+              final weather = state.weatherEntity;
+              final forecast = weather.forecast.forecastDay;
+              saveLocationData(weather);
 
+              return Padding(
+                padding: EdgeInsets.all(screenHeight * 0.01),
+                child: Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    _buildLocationRow(weather, screenWidth),
+                    _buildWeatherDetails(weather, screenWidth, screenHeight),
+                    _buildMoreDetailsButton(context, screenWidth),
+                    _buildForecastList(forecast, screenWidth),
+                  ],
+                ),
+              );
+            } else if (state is WeatherFailureState) {
+              return _buildErrorMessage(state.error.toString(), screenWidth);
+            } else {
+              return const Center(
+                child: Text(
+                  "Loading ...",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'karla',
+                  ),
+                ),
+              );
+            }
+          },
+        ),
+      ),
+      floatingActionButton: CircleAvatar(
+        radius: 25.5,
+        backgroundColor: Colors.white,
+        child: IconButton(
+          iconSize: 35,
+          onPressed: () async {
+            // Get the user's email
+            String? userEmail = await getUserEmail();
+
+            if (userEmail == null) {
+              Fluttertoast.showToast(msg: "User not logged in.");
+              return;
+            }
+
+            // Check if the state is WeatherSuccessState to get weather data
+            var state = BlocProvider.of<WeatherCubit>(context).state;
+
+            if (state is WeatherSuccessState) {
+              // Fetch the weather entity from the state
+              WeatherEntity weatherEntity = state.weatherEntity;
+
+              // Call the getPredictionData function with the weatherEntity
+              List<int> predictions = await getPredictionData(weatherEntity);
+
+              // Now use the predictions list with your AI model and get the result
+              int? prediction = await getAIModelSource(predictions);
+
+              // Prepare event data
+              Map<String, dynamic> eventData = {
+                'prediction': prediction,
+                'date': DateTime.now().toIso8601String(),
+                'weather': {
+                  'condition': weatherEntity.current.condition.text,
+                  'tempC': weatherEntity.current.tempC,
+                  'wind_kph': weatherEntity.current.wind_kph,
+                  'humidity': weatherEntity.current.humidity,
+                },
+              };
+
+              // Save the event data to the database
+              await savePredictionEvent(userEmail, eventData);
+
+              // Perform actions based on the prediction value
+              if (prediction != null) {
+                String predictionResult;
+
+                if (prediction == 1) {
+                  predictionResult = "suitable";
+                  // Action if prediction is 1 (suitable for playing tennis)
+                  Fluttertoast.showToast(
+                      msg: "Prediction: Suitable for playing tennis!",
+                      backgroundColor: Colors.green);
+                  await savePredictionToHistory(
+                      weatherEntity, predictionResult);
+
+                  showDialog<void>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Center(
+                          child: Text(
+                            "AI Prediction Result",
+                            style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'karla'),
+                          ),
+                        ),
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: [
+                              Image.asset("assets/tennis/play.gif"),
+                              const Text(
+                                "Wooohoo, You can play tennis today 🎾",
+                                style: TextStyle(
+                                    fontFamily: 'karla',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22),
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    barrierDismissible: true, // user must tap button!
+                  );
+
+                  savePredictionToHistory(weatherEntity, "Suitable");
+                } else if (prediction == 0) {
+                  predictionResult = "Not Suitable";
+
+                  // Action if prediction is 0 (not suitable for playing tennis)
+                  Fluttertoast.showToast(
+                      msg: "Prediction: Not suitable for playing tennis.",
+                      backgroundColor: Colors.deepOrange);
+
+                  // Save suitable result to the database
+                  await savePredictionToHistory(
+                      weatherEntity, predictionResult);
+
+                  showDialog<void>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Center(
+                          child: Text(
+                            "AI Prediction Result",
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'karla'),
+                          ),
+                        ),
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: [
+                              Image.asset("assets/tennis/cannot.gif"),
+                              const Text(
+                                "Ohhhh, It is hard to play tennis today 😔🎾",
+                                style: TextStyle(
+                                    fontFamily: 'karla',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22),
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    barrierDismissible: true, // user must tap button!
+                  );
+                }
+              } else {
+                // Handle null prediction (e.g., API error)
+                Fluttertoast.showToast(
+                    msg: "Failed to get a prediction. Please try again.",
+                    backgroundColor: Colors.redAccent);
+              }
+            } else {
+              // Handle the case where the weather data is not loaded
+              Fluttertoast.showToast(msg: "Weather data is not available.");
+            }
+          },
+          icon: const Icon(Icons.question_mark),
+        ),
+      ),
+    ));
+  }
 
   Widget _buildLocationRow(WeatherEntity weather, double screenWidth) {
     return Positioned(
-      top: 20,
+      top: 15,
       right: 50,
       left: 50,
       child: Row(
@@ -160,7 +311,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   fontFamily: "karla",
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 5),
               Text(
                 "${weather.location.country}",
                 style: const TextStyle(fontSize: 18, fontFamily: "karla"),
@@ -172,11 +323,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
     );
   }
 
-  Widget _buildWeatherDetails(WeatherEntity weather, double screenWidth, double screenHeight) {
+  Widget _buildWeatherDetails(
+      WeatherEntity weather, double screenWidth, double screenHeight) {
     return Positioned(
       left: 20,
       right: 20,
-      top: 90,
+      top: 70,
       child: Column(
         children: [
           _buildWeatherIcon(weather.current.condition.icon),
@@ -228,10 +380,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     );
   }
 
-
-
-
-  Widget _buildErrorMessage(String txt_error,double screenWidth) {
+  Widget _buildErrorMessage(String txt_error, double screenWidth) {
     return Text(
       "${txt_error} °C",
       style: const TextStyle(
@@ -322,7 +471,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const WeatherDetailsScreen()),
+            MaterialPageRoute(
+                builder: (context) => const WeatherDetailsScreen()),
           );
         },
         child: const Text(
@@ -339,8 +489,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   Widget _buildForecastList(List<ForecastDay> forecast, double screenWidth) {
     return Positioned(
-      top: 520,
-      bottom: 100,
+      top: 475,
+      bottom: 50,
       left: 10,
       right: 10,
       child: ListView.separated(
@@ -398,5 +548,16 @@ class _WeatherScreenState extends State<WeatherScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> saveLocationData(WeatherEntity weather) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+
+    // Save location region and country
+    bool locationSaved =
+        await pref.setString("location", weather.location.region);
+    if (!locationSaved) {
+      await pref.setString("location", weather.location.country);
+    }
   }
 }

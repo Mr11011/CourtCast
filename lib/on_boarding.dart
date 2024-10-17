@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import 'features/auth/sign_in.dart';
+import 'features/auth/views/sign_in.dart';
 
 class OnBoarding extends StatefulWidget {
   const OnBoarding({super.key});
@@ -53,13 +52,20 @@ class _OnBoardingState extends State<OnBoarding> {
                     ),
                   ),
                 ),
-                Text('\n  Where every point is a victory',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontFamily: 'Fredoka',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    )),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child:
+                      Text('Where we can predict you can play tennis or not!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontFamily: 'Fredoka',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          )),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(25.0),
                   child: ElevatedButton(
@@ -70,9 +76,12 @@ class _OnBoardingState extends State<OnBoarding> {
                               builder: (context) => SignInScreen()));
                     },
                     child: Text(
-                      "Ready To Play ?",
+                      "Let's Go ?",
                       style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold,fontFamily: 'karla',fontSize: 16),
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'karla',
+                          fontSize: 16),
                     ),
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.amber),

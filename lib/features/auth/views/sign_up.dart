@@ -1,16 +1,14 @@
-
-
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:courtcast/features/auth/textfield.dart';
+import 'package:courtcast/Core/textfield.dart';
+import 'package:courtcast/features/fetch_weather_conditions/presentation/screens/home_page_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../fetch_weather_conditions/presentation/screens/weather_screen.dart';
-import 'controller/cubit/auth_cubit.dart';
-import 'controller/states/auth_states.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../controller/cubit/auth_cubit.dart';
+import '../controller/states/auth_states.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key});
@@ -40,8 +38,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   backgroundColor: Colors.green);
 
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const WeatherScreen()),
-                    (Route<dynamic> route) => false,
+                MaterialPageRoute(builder: (context) => const HomePageScreen()),
+                (Route<dynamic> route) => false,
               );
             } else if (state is signUpStatesError) {
               Fluttertoast.showToast(
@@ -99,7 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         // Username TextField
                         Padding(
                           padding:
-                          const EdgeInsets.only(bottom: 18.0, top: 35.0),
+                              const EdgeInsets.only(bottom: 18.0, top: 35.0),
                           child: CustomTextFormField(
                             controller: UserNameController,
                             labelText: "Username",
@@ -119,7 +117,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         // Email TextField
                         Padding(
                           padding:
-                          const EdgeInsets.only(bottom: 18.0, top: 18.0),
+                              const EdgeInsets.only(bottom: 18.0, top: 18.0),
                           child: CustomTextFormField(
                             controller: EmailController,
                             labelText: "Email",
@@ -150,7 +148,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         // Password
                         Padding(
                           padding:
-                          const EdgeInsets.only(bottom: 30.0, top: 18.0),
+                              const EdgeInsets.only(bottom: 30.0, top: 18.0),
                           child: CustomTextFormField(
                             controller: PasswordController,
                             labelText: "Password",
@@ -181,6 +179,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             child: ElevatedButton(
                               onPressed: () async {
                                 if (formKey.currentState!.validate()) {
+                                  saveProfileData();
                                   authCubit.get(context).signUpWithFirebase(
                                       EmailController.text.trim(),
                                       PasswordController.text.trim());
@@ -212,5 +211,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  Future saveProfileData() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+
+    await pref.setString("username", UserNameController.text.trim());
+    await pref.setString("email", EmailController.text.trim());
+    debugPrint("email Saved");
+
   }
 }

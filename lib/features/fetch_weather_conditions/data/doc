@@ -8,6 +8,8 @@ with a method to fetch the weather information (`fetchWeatherInfo`), which takes
 - Error Handling: It handles various exceptions like `SocketException`, `TimeoutException`, `http.ClientException`,
  and other unknown errors by throwing a `NetworkException`.
 
+ - AI model data source : this file make the connection with the local server for making AI predictions
+
 
 #### 2. Model
 The `WeatherModel` and its nested models represent the structure of the weather data retrieved from the API.

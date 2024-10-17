@@ -1,14 +1,14 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:courtcast/features/auth/sign_up.dart';
-import 'package:courtcast/features/auth/textfield.dart';
+import 'package:courtcast/features/auth/views/sign_up.dart';
+import 'package:courtcast/Core/textfield.dart';
+import 'package:courtcast/features/fetch_weather_conditions/presentation/screens/home_page_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../fetch_weather_conditions/presentation/screens/weather_screen.dart';
-import 'controller/cubit/auth_cubit.dart';
-import 'controller/states/auth_states.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../controller/cubit/auth_cubit.dart';
+import '../controller/states/auth_states.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -43,7 +43,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   gravity: ToastGravity.SNACKBAR,
                   backgroundColor: Colors.green);
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => WeatherScreen()),
+                MaterialPageRoute(builder: (context) => const HomePageScreen()),
                 (Route<dynamic> route) => false,
               );
             } else if (state is authStatesError) {
@@ -173,6 +173,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             onPressed: () async {
                               String message = '';
                               if (formKey.currentState!.validate()) {
+                                saveProfileData();
                                 authCubit.get(context).signInWithFirebase(
                                     EmailController.text.trim(),
                                     PasswordController.text.trim());
@@ -236,5 +237,11 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       ),
     );
+  }
+
+  Future saveProfileData() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString("email", EmailController.text.trim());
+    debugPrint("email Saved");
   }
 }

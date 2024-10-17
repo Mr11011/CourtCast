@@ -12,7 +12,7 @@ abstract class WeatherDataSource {
 
 class WeatherDataSourceImpl implements WeatherDataSource {
   final http.Client client;
-  static const String API_KEY = "4898a4d7532a4dcd95d162728243009";
+  static const String API_KEY = "396d545a76ea4f42bb0200458241610";
 
   WeatherDataSourceImpl({required this.client});
 
