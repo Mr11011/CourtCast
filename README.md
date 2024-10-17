@@ -18,7 +18,7 @@ The app is built following Flutter Clean Architecture, ensuring the code is well
 - **SharedPreferences**: Persistent storage for user preferences. 📦
 - **Git It**: Simplifies dependency management and enhances the development process. 🚀
 - **Weather API**: Retrieves and processes real-time weather data. 🌦
-
+- **SQLite**: Retrieves prediction results and save it as history. 🌦
 ## Installation 🚀
 
 1. **Ensure Flutter is Installed**:  
